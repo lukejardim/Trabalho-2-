@@ -1,5 +1,11 @@
-# Cria um vetor vazio para armazenar informações dos usuários
-usuarios = {}
+class Usuario:
+    def __init__(self, nome, hierarquia, senha):
+        self.nome = nome
+        self.hierarquia = hierarquia
+        self.senha = senha
+
+# Cria uma lista vazia para armazenar informações dos usuários
+usuarios = []
 
 # Função para criar usuários
 def registrar_usuario():
@@ -16,15 +22,9 @@ def registrar_usuario():
         print("\nHierarquia inválida! Deve ser 1, 2 ou 3.")
         return
 
-    # Armazena as infos do usuário criado 
-    usuario_info = {
-        "Nome": nomeusuario,
-        "Hierarquia": hierarquia,
-        "Senha": senha
-    }
-
-    # Aramazena os usuários e utiliza o nomeusuario como referência
-    usuarios[nomeusuario] = usuario_info
+    # Cria um objeto de usuário e o adiciona à lista
+    usuario = Usuario(nomeusuario, hierarquia, senha)
+    usuarios.append(usuario)
 
     print("\nUsuário registrado com sucesso!")
 
@@ -32,17 +32,18 @@ def login():
     nomeusuario = input("Nome: ")
     senha = input("Senha: ")
 
-    if nomeusuario in usuarios and usuarios[nomeusuario]["Senha"] == senha:
-        posto = {usuarios[nomeusuario]['Hierarquia']}
-        if posto == {'1'}:
-            hierarquia = "Adm"
-        elif posto == '2':
-            hierarquia = "Moderador"
-        else:
-            hierarquia = "User"
-        print(f"\nBem-vindo, {nomeusuario}! Você é um {hierarquia}.")
-    else:
-        print("\nNome de usuário ou senha incorretos.")
+    for usuario in usuarios:
+        if usuario.nome == nomeusuario and usuario.senha == senha:
+            if usuario.hierarquia == "1":
+                hierarquia = "Adm"
+            elif usuario.hierarquia == "2":
+                hierarquia = "Moderador"
+            else:
+                hierarquia = "User"
+            print(f"\nBem-vindo, {nomeusuario}! Você é um {hierarquia}.")
+            return
+
+    print("\nNome de usuário ou senha incorretos.")
 
 def main():
     while True:
@@ -54,8 +55,8 @@ def main():
         elif opcao == "3":
             print("\nVocê saiu do programa.")
             print("Usuários registrados:")
-            for usuario, info in usuarios.items():
-                print(f"Nome: {info['Nome']}")
+            for usuario in usuarios:
+                print(f"Nome: {usuario.nome}")
             break
         else:
             print("\nOpção inválida. Escolha 1 para registrar, 2 para entrar ou 3 para sair.")
